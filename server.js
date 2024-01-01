@@ -1,11 +1,25 @@
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
+const cors = require ('cors')
+const cookieParser = require ('cookie-parser')
 let assignment = require('./routes/assignments');
+const routes = require('./routes/routes')
 
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.set('debug', true);
+
+ app.use(cors({
+   credentials:true,
+   origin:['http://localhost:4200']
+ }))
+
+
+app.use(cookieParser())
+app.use(express.json())
+
+app.use('/api', routes);
 
 // remplacer toute cette chaine par l'URI de connexion à votre propre base dans le cloud s
 const uri = 'mongodb+srv://Marouane:azerty12345@cluster0.tkshmvj.mongodb.net/assignments?retryWrites=true&w=majority';
@@ -13,26 +27,27 @@ const uri = 'mongodb+srv://Marouane:azerty12345@cluster0.tkshmvj.mongodb.net/ass
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify:false
+  useFindAndModify:false,
+  useCreateIndex: true,
 };
 
 mongoose.connect(uri, options)
   .then(() => {
     console.log("Connecté à la base MongoDB assignments dans le cloud !");
     console.log("at URI = " + uri);
-    console.log("vérifiez with http://localhost:8010/api/assignments que cela fonctionne")
+    console.log("vérifiez with http://localhost:8010/api/users que cela fonctionne")
     },
     err => {
       console.log('Erreur de connexion: ', err);
     });
 
-// Pour accepter les connexions cross-domain (CORS)
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
-});
+//  Pour accepter les connexions cross-domain (CORS)
+ app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+   next();
+ });
 
 // Pour les formulaires
 app.use(bodyParser.urlencoded({extended: true}));
