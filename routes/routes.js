@@ -120,4 +120,31 @@ router.post('/logout', async (req,res) =>{
     })
 })
 
+router.get('/checkAuth', async (req, res) => {
+    try {
+      const token = req.cookies.jwt;
+  
+      if (!token) {
+        return res.status(401).json({ loggedIn: false, isAdmin: false });
+      }
+  
+      const claims = jwt.verify(token, 'TOKEN_SECRET');
+      if (!claims) {
+        return res.status(401).json({ loggedIn: false, isAdmin: false });
+      }
+  
+      const user = await User.findById(claims._id);
+  
+      if (!user) {
+        return res.status(404).json({ loggedIn: false, isAdmin: false });
+      }
+  
+      // User found, return loggedIn as true and isAdmin value from the user
+      res.json({ loggedIn: true, isAdmin: user.isAdmin  });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server Error' });
+    }
+  });
+
 module.exports = router
