@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 const cors = require ('cors')
 const cookieParser = require ('cookie-parser')
 let assignment = require('./routes/assignments');
+let matiere = require('./routes/matieres');
 const routes = require('./routes/routes')
 
 let mongoose = require('mongoose');
@@ -23,7 +24,7 @@ app.use('/api', routes);
 
 // remplacer toute cette chaine par l'URI de connexion à votre propre base dans le cloud s
 const uri = 'mongodb+srv://Marouane:azerty12345@cluster0.tkshmvj.mongodb.net/assignments?retryWrites=true&w=majority';
-
+//uri = "http://localhost:8010/api/assignments";
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -76,6 +77,14 @@ app.route(prefix + '/assignments/maxid')
       res.status(500).json({ error: 'An error occurred' });
     }
   });
+
+app.route(prefix + '/matieres')
+  .get(matiere.getMatieres)
+  .post(matiere.postMatiere);
+
+app.route(prefix + '/matieres/:id')
+  .get(matiere.getMatiere)
+  .delete(matiere.deleteMatiere);
 
 // On démarre le serveur
 app.listen(port, "0.0.0.0");
