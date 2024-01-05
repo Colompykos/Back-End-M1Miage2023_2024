@@ -1,17 +1,6 @@
 let Matiere = require('../model/matiere');
 
 
-let newMatiere = new Matiere({
-    nom: 'Base de données',
-    professeur: 'Nom du professeur',
-    image: 'URL de la photo du professeur'
-});
-
-newMatiere.save(function(err) {
-    if (err) throw err;
-    console.log('Matière créée avec succès');
-});
-
 // Récupérer toutes les matières (GET)
 function getMatieres(req, res){
     Matiere.find((err, matieres) => {

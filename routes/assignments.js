@@ -60,6 +60,16 @@ function updateAssignment(req, res) {
     });
 
 }
+// Récupérer l'id du dernier assignment (GET)
+async function getLastAssignmentId(req, res) {
+    try {
+      const lastAssignment = await Assignment.findOne().sort('-id').exec();
+      const lastId = lastAssignment ? lastAssignment.id : 0;
+      res.json(lastId);
+    } catch (error) {
+      res.status(500).json({ error: 'Une erreur est survenue' });
+    }
+  }
 
 // suppression d'un assignment (DELETE)
 function deleteAssignment(req, res) {
@@ -70,8 +80,11 @@ function deleteAssignment(req, res) {
         }
         res.json({message: `${assignment.nom} deleted`});
     })
+
+
+
 }
 
 
 
-module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment };
+module.exports = { getAssignments, postAssignment, getAssignment, updateAssignment, deleteAssignment, getLastAssignmentId };
