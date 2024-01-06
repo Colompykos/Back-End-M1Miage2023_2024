@@ -21,6 +21,30 @@ function getAssignment(req, res){
     })
 }
 
+/*
+let assignments = [];
+    let auteurs = ["Marwen", "Mohamed", "Lucas", "Nawel", "Melina","Marcel"];
+    let matieres = ["javascript", "Base de données", "Sport", "Planification", "Communication", "Math BigData", "Management SI", "Gestion Projet" ];
+
+    for(let i = 1; i <= 11; i++) {
+        let assignment = new Assignment();
+        assignment.id = i;
+        assignment.nom = `Assignment ${i}`;
+        assignment.auteur = auteurs[Math.floor(Math.random() * auteurs.length)]; // Auteur aléatoire
+        assignment.matiere = matieres[Math.floor(Math.random() * matieres.length)]; // Matière aléatoire
+        assignment.dateDeRendu = new Date(2022, Math.floor(Math.random() * 12), Math.floor(Math.random() * 30)); // Date de rendu aléatoire en 2022
+        assignment.note = Math.floor(Math.random() * 20) + 1; // Note aléatoire entre 1 et 20
+        assignment.remarques = `Remarques pour l'assignment ${i}`;
+        assignments.push(assignment);
+
+    }
+
+    Assignment.insertMany(assignments, (err) => {
+        if (err) throw err;
+        console.log('Matière créée avec succès');
+    });
+*/
+
 // Ajout d'un assignment (POST)
 function postAssignment(req, res){
     let assignment = new Assignment();

@@ -1,16 +1,6 @@
 let Matiere = require('../model/matiere');
 
 
-let newMatiere = new Matiere({
-    nom: 'Base de données',
-    professeur: 'Nom du professeur',
-    image: 'URL de la photo du professeur'
-});
-
-newMatiere.save(function(err) {
-    if (err) throw err;
-    console.log('Matière créée avec succès');
-});
 
 // Récupérer toutes les matières (GET)
 function getMatieres(req, res){
@@ -53,19 +43,16 @@ function postMatiere(req, res){
 }
 
 // Update d'une matière (PUT)
-function updateMatiere(req, res) {
+async function updateMatiere(req, res) {
     console.log("UPDATE recu matiere : ");
     console.log(req.body);
-    Matiere.findByIdAndUpdate(req.body._id, req.body, {new: true}, (err, matiere) => {
-        if (err) {
-            console.log(err);
-            res.send(err)
-        } else {
-          res.json({message: 'updated'})
-        }
-
-        // console.log('updated ', matiere)
-    });
+    try {
+        const matiere = await Matiere.findByIdAndUpdate(req.body._id, req.body, {new: true});
+        res.json({message: 'updated', matiere: matiere});
+    } catch (err) {
+        console.log(err);
+        res.send(err);
+    }
 }
 
 // suppression d'une matière (DELETE)
