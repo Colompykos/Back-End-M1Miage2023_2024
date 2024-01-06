@@ -1,7 +1,6 @@
 let Matiere = require('../model/matiere');
 
 
-
 // Récupérer toutes les matières (GET)
 function getMatieres(req, res){
     Matiere.find((err, matieres) => {
