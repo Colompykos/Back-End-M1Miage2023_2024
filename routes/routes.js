@@ -132,13 +132,13 @@ router.get('/checkAuth', async (req, res) => {
   
       const claims = jwt.verify(token, 'TOKEN_SECRET');
       if (!claims) {
-        return res.status(401).json({ loggedIn: false, isAdmin: false });
+        return res.status(401).json({ loggedIn: false, isAdmin: false,  });
       }
   
       const user = await User.findById(claims._id);
   
       if (!user) {
-        return res.status(404).json({ loggedIn: false, isAdmin: false });
+        return res.status(404).json({ loggedIn: false, isAdmin: false, token: token });
       }
   
       // User found, return loggedIn as true and isAdmin value from the user
