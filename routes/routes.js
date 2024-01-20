@@ -45,7 +45,8 @@ router.post('/register', async (req,res) => {
     
         res.json({
             user:result,
-            state:"validated"
+            state:"validated",
+            token: token,
         })
     }
 })
@@ -75,7 +76,8 @@ router.post('/login', async (req,res) => {
     })
 
     res.send({
-        message:"succes"
+        message:"succes",
+        token: token,
     })
 
 })
