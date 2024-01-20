@@ -40,7 +40,8 @@ router.post('/register', async (req,res) => {
 
         res.cookie("jwt",token,{
             httpOnly:true,
-            maxAge:12*60*60*1000 //half a day
+            maxAge:12*60*60*1000, //half a day
+            domain: 'http://localhost:4200',
         })
     
         res.json({
@@ -72,7 +73,8 @@ router.post('/login', async (req,res) => {
     const token = jwt.sign({_id:user._id},"TOKEN_SECRET")
     res.cookie("jwt",token,{
         httpOnly:true,
-        maxAge:12*60*60*1000 //half a day
+        maxAge:12*60*60*1000, //half a day
+        domain: 'http://localhost:4200',
     })
 
     res.send({
