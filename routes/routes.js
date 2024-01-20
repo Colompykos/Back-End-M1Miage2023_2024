@@ -38,12 +38,12 @@ router.post('/register', async (req,res) => {
         const {_id} = await result.toJSON()
         const token = jwt.sign({_id:_id},"TOKEN_SECRET")
 
-        res.cookie("jwt",token,{
-            httpOnly:true,
-            maxAge:12*60*60*1000, //half a day
-            sameSite: 'none',
-            secure: true,
-        })
+        // res.cookie("jwt",token,{
+        //     httpOnly:true,
+        //     maxAge:12*60*60*1000, //half a day
+        //     sameSite: 'none',
+        //     secure: true,
+        // })
     
         res.json({
             user:result,
@@ -72,12 +72,13 @@ router.post('/login', async (req,res) => {
     }
 
     const token = jwt.sign({_id:user._id},"TOKEN_SECRET")
-    res.cookie("jwt",token,{
-        httpOnly:true,
-        maxAge:12*60*60*1000, //half a day
-        sameSite: 'none',
-        secure: true,
-    })
+
+    // res.cookie("jwt",token,{
+    //     httpOnly:true,
+    //     maxAge:12*60*60*1000, //half a day
+    //     sameSite: 'none',
+    //     secure: true,
+    // })
 
     res.send({
         message:"succes",
@@ -88,8 +89,8 @@ router.post('/login', async (req,res) => {
 router.get('/user', async (req,res) => {
 
     try {
-        const cookie =req.cookies["jwt"]        
-        const claims = jwt.verify(cookie,"TOKEN_SECRET")
+        const token =req.headers["Authorization"]        
+        const claims = jwt.verify(token,"TOKEN_SECRET")
 
         if(!claims){
             return res.status(401).send({
@@ -100,10 +101,7 @@ router.get('/user', async (req,res) => {
         const user = await User.findOne({_id:claims._id})
         const {password,...data} = await user.toJSON()
 
-        res.send({
-            ...data,
-            token: cookie
-          });
+        res.send(data);
 
     } catch (error) {
         return res.status(401).send({
@@ -123,7 +121,7 @@ router.get('/users', async (req, res) => {
 });
 
 router.post('/logout', async (req,res) =>{
-    res.cookie("jwt", "", { maxAge: 0, httpOnly: true, sameSite: 'none', secure: true });
+    // res.cookie("jwt", "", { maxAge: 0, httpOnly: true, sameSite: 'none', secure: true });
     res.send({
         message:"succes"
     })
@@ -131,7 +129,7 @@ router.post('/logout', async (req,res) =>{
 
 router.get('/checkAuth', async (req, res) => {
     try {
-      const token = req.cookies.jwt;
+      const token = req.headers.Authorization;
   
       if (!token) {
         return res.status(401).json({ loggedIn: false, isAdmin: false });

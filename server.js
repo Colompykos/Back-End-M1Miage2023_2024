@@ -2,7 +2,7 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 const cors = require ('cors')
-const cookieParser = require ('cookie-parser')
+// const cookieParser = require ('cookie-parser')
 let assignment = require('./routes/assignments');
 let matiere = require('./routes/matieres');
 const routes = require('./routes/routes')
@@ -17,7 +17,7 @@ mongoose.set('debug', true);
  }))
 
 
-app.use(cookieParser())
+// app.use(cookieParser())
 app.use(express.json())
 
 app.use('/api', routes);
