@@ -123,7 +123,7 @@ router.get('/users', async (req, res) => {
 });
 
 router.post('/logout', async (req,res) =>{
-    res.cookie("jwt","",{maxAge:0})
+    res.cookie("jwt", "", { maxAge: 0, httpOnly: true, sameSite: 'none', secure: true });
     res.send({
         message:"succes"
     })
