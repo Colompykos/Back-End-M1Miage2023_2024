@@ -41,7 +41,8 @@ router.post('/register', async (req,res) => {
         res.cookie("jwt",token,{
             httpOnly:true,
             maxAge:12*60*60*1000, //half a day
-            domain: 'http://localhost:4200',
+            sameSite: 'none',
+            secure: true,
         })
     
         res.json({
@@ -74,7 +75,8 @@ router.post('/login', async (req,res) => {
     res.cookie("jwt",token,{
         httpOnly:true,
         maxAge:12*60*60*1000, //half a day
-        domain: 'http://localhost:4200',
+        sameSite: 'none',
+        secure: true,
     })
 
     res.send({
