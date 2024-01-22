@@ -40,12 +40,15 @@ router.post('/register', async (req,res) => {
 
         res.cookie("jwt",token,{
             httpOnly:true,
-            maxAge:12*60*60*1000 //half a day
+            maxAge:12*60*60*1000, //half a day
+            sameSite: 'none',
+            secure: true,
         })
     
         res.json({
             user:result,
-            state:"validated"
+            state:"validated",
+            token: token,
         })
     }
 })
@@ -71,11 +74,14 @@ router.post('/login', async (req,res) => {
     const token = jwt.sign({_id:user._id},"TOKEN_SECRET")
     res.cookie("jwt",token,{
         httpOnly:true,
-        maxAge:12*60*60*1000 //half a day
+        maxAge:12*60*60*1000, //half a day
+        sameSite: 'none',
+        secure: true,
     })
 
     res.send({
-        message:"succes"
+        message:"succes",
+        token: token,
     })
 
 })
@@ -94,7 +100,10 @@ router.get('/user', async (req,res) => {
         const user = await User.findOne({_id:claims._id})
         const {password,...data} = await user.toJSON()
 
-        res.send(data)
+        res.send({
+            ...data,
+            token: cookie
+          });
 
     } catch (error) {
         return res.status(401).send({
@@ -114,7 +123,7 @@ router.get('/users', async (req, res) => {
 });
 
 router.post('/logout', async (req,res) =>{
-    res.cookie("jwt","",{maxAge:0})
+    res.cookie("jwt", "", { maxAge: 0, httpOnly: true, sameSite: 'none', secure: true });
     res.send({
         message:"succes"
     })
@@ -130,7 +139,7 @@ router.get('/checkAuth', async (req, res) => {
   
       const claims = jwt.verify(token, 'TOKEN_SECRET');
       if (!claims) {
-        return res.status(401).json({ loggedIn: false, isAdmin: false });
+        return res.status(401).json({ loggedIn: false, isAdmin: false,  });
       }
   
       const user = await User.findById(claims._id);
@@ -140,7 +149,7 @@ router.get('/checkAuth', async (req, res) => {
       }
   
       // User found, return loggedIn as true and isAdmin value from the user
-      res.json({ loggedIn: true, isAdmin: user.isAdmin  });
+      res.json({ loggedIn: true, isAdmin: user.isAdmin,  token: token  });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Server Error' });
