@@ -1,4 +1,3 @@
-const { Binary } = require('mongodb');
 let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
