@@ -13,7 +13,7 @@ mongoose.set('debug', true);
 
  app.use(cors({
    credentials:true,
-   origin:['http://localhost:4200',"https://ornate-alfajores-715c4d.netlify.app"]
+   origin:['http://localhost:4200',"https://app-miage-assignments.netlify.app/"]
  }))
 
 
